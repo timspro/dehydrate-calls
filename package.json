@@ -1,14 +1,14 @@
 {
   "name": "@tim-code/dehydrate-calls",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "",
   "type": "module",
   "author": "Tim Sprowl",
   "license": "MIT",
   "sideEffects": false,
-  "main": "src/index.js",
+  "main": "index.js",
   "exports": {
-    ".": "./src/index.js"
+    ".": "./index.js"
   },
   "scripts": {
     "test": "node --no-warnings --experimental-vm-modules node_modules/.bin/jest"
