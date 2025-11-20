@@ -30,7 +30,7 @@ export function getCallCapturer(context, path = []) {
           }
         } else {
           capturer = (..._args) => {
-            return { _path: path.concat([key]), _args, _class: false }
+            return { _path: path.concat([key]), _args }
           }
         }
         // allow functions in context to be referenced without being executed

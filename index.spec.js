@@ -10,7 +10,6 @@ describe("getCallCapturer", () => {
     expect(callSpec).toEqual({
       _path: ["Math", "sqrt"],
       _args: [9],
-      _class: false,
     })
 
     // function reference should serialize via toJSON to just a path
@@ -58,7 +57,6 @@ describe("getCallCapturer", () => {
     expect(spec).toEqual({
       _path: ["a", "b", "c"],
       _args: [10],
-      _class: false,
     })
 
     expect(() => $.value).toThrow(/context does not have function for path:/)
@@ -74,8 +72,8 @@ describe("dehydrate", () => {
     }))
 
     // Validate immediate structure (called functions produce objects)
-    expect(out.a).toEqual({ _path: ["Math", "sqrt"], _args: [16], _class: false })
-    expect(out.mixed[0]).toEqual({ _path: ["Math", "max"], _args: [1, 7, 3], _class: false })
+    expect(out.a).toEqual({ _path: ["Math", "sqrt"], _args: [16] })
+    expect(out.mixed[0]).toEqual({ _path: ["Math", "max"], _args: [1, 7, 3] })
     expect(out.mixed[1]).toBe("x")
 
     // Validate JSON serialization of uncalled function
