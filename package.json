@@ -19,7 +19,7 @@
     "jest": "^30.2.0"
   },
   "dependencies": {
-    "@tim-code/my-util": "0.6.2"
+    "@tim-code/my-util": "^0.6.2"
   },
   "jest": {
     "transform": {}
