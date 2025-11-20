@@ -26,7 +26,7 @@ export function getCallCapturer(context, path = []) {
             if (!new.target) {
               throw new Error("captured class instantiations should also use 'new'")
             }
-            return { _path: path.concat([key]), _args, _class: true }
+            return { _path: path.concat([key]), _class: true, _args }
           }
         } else {
           capturer = (..._args) => {
