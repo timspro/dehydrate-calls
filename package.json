@@ -1,0 +1,30 @@
+{
+  "name": "@tim-code/dehydrate-calls",
+  "version": "0.0.1",
+  "description": "",
+  "type": "module",
+  "author": "Tim Sprowl",
+  "license": "MIT",
+  "sideEffects": false,
+  "main": "src/index.js",
+  "exports": {
+    ".": "./src/index.js"
+  },
+  "scripts": {
+    "test": "node --no-warnings --experimental-vm-modules node_modules/.bin/jest"
+  },
+  "devDependencies": {
+    "@jest/globals": "^30.2.0",
+    "@tim-code/eslint-config": "^2.0.1",
+    "jest": "^30.2.0"
+  },
+  "dependencies": {
+    "@tim-code/my-util": "0.6.2"
+  },
+  "jest": {
+    "transform": {}
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
