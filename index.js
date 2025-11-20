@@ -64,20 +64,23 @@ export function dehydrate(context, callback) {
 }
 
 export function executeDehydrated(context, { _path, _args, _class }) {
+  let pathContext = context
   for (const key of _path) {
-    context = context?.[key]
+    pathContext = pathContext?.[key]
   }
-  if (typeof context === "function") {
+  if (typeof pathContext === "function") {
     if (_args) {
+      // eslint-disable-next-line no-use-before-define
+      const args = hydrate(_args, context)
       if (_class) {
-        if (isClass(context)) {
-          return new context(..._args)
+        if (isClass(pathContext)) {
+          return new pathContext(...args)
         }
         throw new Error(`context does not have a class at path: ${_path.join(".")}`)
       }
-      return context(..._args)
+      return pathContext(...args)
     }
-    return context
+    return pathContext
   }
   throw new Error(`context does not have a function at path: ${_path.join(".")}`)
 }

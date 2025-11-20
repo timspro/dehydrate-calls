@@ -61,6 +61,10 @@ describe("getCallCapturer", () => {
 
     expect(() => $.value).toThrow(/context does not have function for path:/)
   })
+
+  // ISSUE: Accessing a non-function value (e.g. $.value) throws immediately with the message
+  // "context does not have function for path: ...", which may be surprising since the error
+  // happens on property access rather than an attempted call and the message implies a call intent.
 })
 
 describe("dehydrate", () => {
@@ -138,6 +142,44 @@ describe("executeDehydrated", () => {
     expect(() => executeDehydrated({}, { _path: ["Missing", "fn"] })).toThrow(
       "context does not have a function at path: Missing.fn"
     )
+  })
+
+  it("hydrates nested dehydrated args before invoking the target function", () => {
+    const context = { Math }
+    const result = executeDehydrated(context, {
+      _path: ["Math", "max"],
+      _args: [{ _path: ["Math", "sqrt"], _args: [16] }, 3],
+    })
+    expect(result).toBe(4)
+  })
+
+  it("hydrates constructor specs inside args before invocation", () => {
+    class Box {
+      constructor(v) {
+        this.v = v
+      }
+    }
+    const context = {
+      NS: { Box },
+      utils: { getV: (b) => b.v },
+    }
+    const result = executeDehydrated(context, {
+      _path: ["utils", "getV"],
+      _args: [{ _path: ["NS", "Box"], _args: [123], _class: true }],
+    })
+    expect(result).toBe(123)
+  })
+
+  it("passes function references (no _args) through when used as args", () => {
+    const context = {
+      Math,
+      utils: { call: (fn, x) => fn(x) },
+    }
+    const result = executeDehydrated(context, {
+      _path: ["utils", "call"],
+      _args: [{ _path: ["Math", "sqrt"] }, 9],
+    })
+    expect(result).toBe(3)
   })
 })
 
