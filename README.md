@@ -2,6 +2,10 @@
 
 Allows sending JSON that encodes function calls.
 
+## First Time Setup
+
+`npm install @tim-code/my-util`
+
 ## What??
 
 There are times when we want to send a JSON object to the server, but there are aspects to the JSON object that do not automatically serialize well to JSON. In general, in order to send this object we need to "dehydrate" it, meaning turn into well-formed JSON, and then on the server we can "rehydrate" it by turning the JSON back into what it was originally.
@@ -93,7 +97,3 @@ const request = dehydrate({ Person }, ($) => ({ a: new $.Person("John Smith") })
 `request` is: `{a: {_path: ["Person"], _args: ["John Smith"], _class: true}}`.
 
 Note that it is required to still use `new` when calling the fake constructor.
-
-## First Time Setup
-
-`npm install @tim-code/my-util`
