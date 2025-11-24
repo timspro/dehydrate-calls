@@ -1,10 +1,10 @@
 import { describe, expect, it } from "@jest/globals"
-import { dehydrate, executeDehydrated, getCallCapturer, hydrate } from "./index.js"
+import { createCallCapturer, dehydrate, executeDehydrated, hydrate } from "./index.js"
 
-describe("getCallCapturer", () => {
+describe("createCallCapturer", () => {
   it("captures function calls with args and supports toJSON for function references", () => {
     const ctx = { Math: { sqrt: Math.sqrt } }
-    const $ = getCallCapturer(ctx)
+    const $ = createCallCapturer(ctx)
 
     const callSpec = $.Math.sqrt(9)
     expect(callSpec).toEqual({
@@ -26,7 +26,7 @@ describe("getCallCapturer", () => {
       }
     }
     const ctx = { C: { Box } }
-    const $ = getCallCapturer(ctx)
+    const $ = createCallCapturer(ctx)
 
     // must use "new" for classes
     const spec = new $.C.Box("value")
@@ -51,7 +51,7 @@ describe("getCallCapturer", () => {
       a: { b: { c: (x) => x + 1 } },
       value: 42,
     }
-    const $ = getCallCapturer(ctx)
+    const $ = createCallCapturer(ctx)
 
     const spec = $.a.b.c(10)
     expect(spec).toEqual({
@@ -61,10 +61,6 @@ describe("getCallCapturer", () => {
 
     expect(() => $.value).toThrow(/context does not have function for path:/)
   })
-
-  // ISSUE: Accessing a non-function value (e.g. $.value) throws immediately with the message
-  // "context does not have function for path: ...", which may be surprising since the error
-  // happens on property access rather than an attempted call and the message implies a call intent.
 })
 
 describe("dehydrate", () => {

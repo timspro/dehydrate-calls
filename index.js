@@ -2,17 +2,17 @@ import { isClass } from "@tim-code/my-util"
 
 /**
  * Returns an object that "captures" calls by translating them to a JSON format.
- * Example: `const $ = getCallCapturer({ Math }); return { a: $.Math.sqrt(2) }`
+ * Example: `const $ = createCallCapturer({ Math }); return { a: $.Math.sqrt(2) }`
  * Returns: {a: {_path: ["Math", "sqrt"], _args: [2]}}
  *
  * Example with function reference, not call:
- * `const $ = getCallCapturer({ Math }); return JSON.parse(JSON.stringify({ a: $.Math.sqrt }))`
+ * `const $ = createCallCapturer({ Math }); return JSON.parse(JSON.stringify({ a: $.Math.sqrt }))`
  * Returns: {a: {_path: ["Math", "sqrt"] }}
  * @param {Object} context
  * @param {Function} callback
  * @returns {Object}
  */
-export function getCallCapturer(context, path = []) {
+export function createCallCapturer(context, path = []) {
   return new Proxy(context, {
     get(target, key) {
       const value = target[key]
@@ -41,7 +41,7 @@ export function getCallCapturer(context, path = []) {
         return capturer
       }
       if (value && typeof value === "object") {
-        return getCallCapturer(value, path.concat([key]))
+        return createCallCapturer(value, path.concat([key]))
       }
       throw new Error(
         `context does not have function for path: ${path.concat([key]).join(".")}`
@@ -59,7 +59,7 @@ export function getCallCapturer(context, path = []) {
  * @returns {Object}
  */
 export function dehydrate(context, callback) {
-  const result = callback(getCallCapturer(context))
+  const result = callback(createCallCapturer(context))
   return result
 }
 
