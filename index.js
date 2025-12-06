@@ -107,7 +107,7 @@ export function hydrate(json, context) {
       const result = executeDehydrated(context, json)
       return result
     }
-    const result = {}
+    const result = Object.create(null)
     for (const key of Object.keys(json)) {
       result[key] = hydrate(json[key], context)
     }
